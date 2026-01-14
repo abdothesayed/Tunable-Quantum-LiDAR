@@ -1,0 +1,57 @@
+datapoints = 2;
+
+for(i=1:datapoints) {
+    switchtolayout;
+    
+    width = 70e-9 + (145e-9 - 70e-9)*rand(); #The rand function returns a value ∈ [0,1], as to help generate random values
+    #length = 0 + (220e-9 - 0)*rand();
+    max_length = 50e-9 + (110e-9 - 50e-9)*rand(); #the lowest value is set for 50nm to avoid mesh issues
+    depth = 50e-9 + (400e-9 - 50e-9)*rand();
+    ref_index = 2 + (4 - 2)*rand();
+    
+
+    #1st pillar
+    V1 = matrix(4,2);
+    V1(1,1)=70e-9;
+    V1(1,2)=max_length;
+    V1(2,1)=width; 
+    V1(2,2)=max_length;
+    V1(3,1)=width;    
+    V1(3,2)=-max_length;
+    V1(4,1)=70e-9;
+    V1(4,2)=-max_length;
+    
+    select("NbOCl2x resonator right1"); set("vertices", V1); set("material", "<Object defined dielectric>"); set("index", ref_index); set("z span", depth);
+    
+    #2nd pillar
+    V2 = matrix(4,2);
+    V2(1,1)=-70e-9;
+    V2(1,2)=max_length;
+    V2(2,1)=-width;
+    V2(2,2)=max_length;
+    V2(3,1)=-width;
+    V2(3,2)=-max_length;
+    V2(4,1)=-70e-9;
+    V2(4,2)=-max_length;
+    
+    select("NbOCl2x resonator left1"); set("vertices", V2); set("material", "<Object defined dielectric>"); set("index", ref_index); set("z span", depth);
+    
+    run;
+
+        E_data = getresult("Efield_3D", "E");
+        H_data = getresult("Efield_3D", "H");
+        
+        x_coords_E = E_data.x;
+        y_coords_E = E_data.y;
+        z_coords_E = E_data.z;
+        
+        x_coords_H = H_data.x;
+        y_coords_H = H_data.y;
+        z_coords_H = H_data.z;
+        
+        
+        filename = "resultsaasd_" + num2str(i);
+        matlabsave(filename, width, max_length, depth, ref_index, x_coords_E, y_coords_E, z_coords_E, x_coords_H, y_coords_H, z_coords_H);
+        
+        clear(E_data); clear(H_data);
+}
