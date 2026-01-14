@@ -9,7 +9,6 @@ for(i=1:datapoints) {
     depth = 50e-9 + (400e-9 - 50e-9)*rand();
     ref_index = 2 + (4 - 2)*rand();
     
-
     #1st pillar
     V1 = matrix(4,2);
     V1(1,1)=70e-9;
@@ -37,21 +36,17 @@ for(i=1:datapoints) {
     select("NbOCl2x resonator left1"); set("vertices", V2); set("material", "<Object defined dielectric>"); set("index", ref_index); set("z span", depth);
     
     run;
-
-        E_data = getresult("Efield_3D", "E");
-        H_data = getresult("Efield_3D", "H");
+    
+    Transmission_data = abs(transmission("Transmission")); 
+    Reflection_data = abs(transmission("Reflection"));
+    
+    E_data = getresult("Efield_3D", "E");
+                
+    x_coords_E = E_data.Ex;
+    y_coords_E = E_data.Ey;
+    z_coords_E = E_data.Ez;
         
-        x_coords_E = E_data.x;
-        y_coords_E = E_data.y;
-        z_coords_E = E_data.z;
-        
-        x_coords_H = H_data.x;
-        y_coords_H = H_data.y;
-        z_coords_H = H_data.z;
-        
-        
-        filename = "resultsaasd_" + num2str(i);
-        matlabsave(filename, width, max_length, depth, ref_index, x_coords_E, y_coords_E, z_coords_E, x_coords_H, y_coords_H, z_coords_H);
-        
-        clear(E_data); clear(H_data);
+    filename = "output" + num2str(i);
+    matlabsave(filename, width, max_length, depth, ref_index, x_coords_E, y_coords_E, z_coords_E, Transmission_data, Reflection_data);
+    clear(E_data);
 }
