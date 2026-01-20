@@ -16,9 +16,9 @@ for(i=1:datapoints) {
     V1(2,1)=width; 
     V1(2,2)=max_length;
     V1(3,1)=width;    
-    V1(3,2)=-max_length;
+    V1(3,2)=-110e-9; #base is constant
     V1(4,1)=70e-9;
-    V1(4,2)=-max_length;
+    V1(4,2)=-110e-9; #base is constant
     
     select("NbOCl2x resonator right1"); set("vertices", V1); set("material", "<Object defined dielectric>"); set("index", ref_index); set("z span", depth);
     
@@ -29,9 +29,9 @@ for(i=1:datapoints) {
     V2(2,1)=-width;
     V2(2,2)=max_length;
     V2(3,1)=-width;
-    V2(3,2)=-max_length;
+    V2(3,2)=-110e-9; #base is constant
     V2(4,1)=-70e-9;
-    V2(4,2)=-max_length;
+    V2(4,2)=-110e-9; #base is constant
     
     select("NbOCl2x resonator left1"); set("vertices", V2); set("material", "<Object defined dielectric>"); set("index", ref_index); set("z span", depth);
     
